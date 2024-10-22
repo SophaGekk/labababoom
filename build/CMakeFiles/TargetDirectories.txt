@@ -1,0 +1,9 @@
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/lab4.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/package.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/package_source.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/edit_cache.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/list_install_components.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/install.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/install/local.dir
+C:/Users/Sopha/Downloads/lab4/build/CMakeFiles/install/strip.dir

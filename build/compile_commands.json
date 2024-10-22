@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/Sopha/Downloads/lab4/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -g -o CMakeFiles\\lab4.dir\\main.cpp.obj -c C:\\Users\\Sopha\\Downloads\\lab4\\main.cpp",
+  "file": "C:\\Users\\Sopha\\Downloads\\lab4\\main.cpp",
+  "output": "CMakeFiles\\lab4.dir\\main.cpp.obj"
+}
+]
