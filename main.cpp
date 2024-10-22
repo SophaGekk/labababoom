@@ -152,6 +152,12 @@ public:
    
     // Деструктор
     ~DoubleLinkedList() { clear(); }
+    DoubleLinkedList(DoubleLinkedList&& other) noexcept
+        : head(other.head), tail(other.tail), numberOfElements(other.numberOfElements), allocator(std::move(other.allocator)) {
+        other.head = nullptr; 
+        other.tail = nullptr;
+        other.numberOfElements = 0;
+    }
 
     // Добавление элемента в конец
     void push_back(const T& value) {
@@ -322,7 +328,10 @@ public:
 
     // Проверка на пустоту
     bool empty() const {
-        return size == 0;
+        if ((head == nullptr) && (tail == nullptr)) {
+            return true;
+        }
+        return false;
     }
 };
 
