@@ -7,7 +7,7 @@
 // T - тип данных, для которых используется аллокатор
 // BlockSize - размер блока (по умолчанию 10)
 template <class T, size_t BlockSize = 10>
-struct allocator_с11 {// Тип данных, который может хранить аллокатор
+struct _allocator_с11 {// Тип данных, который может хранить аллокатор
     using value_type = T;
     // Указатель на пул памяти (начало блока)
     void* pool;
@@ -17,7 +17,7 @@ struct allocator_с11 {// Тип данных, который может хра�
     // current_block_size - текущий размер блока
     // allocated_elements - количество выделенных элементов
     // block - указатель на начало блока
-    allocator_с11 () : current_block_size(BlockSize), allocated_elements(0),
+    _allocator_с11 () : current_block_size(BlockSize), allocated_elements(0),
         block(static_cast<T*>(std::malloc(BlockSize * sizeof(T)))) {
         if (!block)
             throw std::bad_alloc();  // Если выделение памяти не удалось, выбрасываем исключение std::bad_alloc
@@ -25,12 +25,12 @@ struct allocator_с11 {// Тип данных, который может хра�
     
     // Деструктор аллокатора
     // Освобождает память, выделенную для пула
-    ~allocator_с11() {
+    ~_allocator_с11() {
         std::free(block);
     }
     
-    // Конструктор копирования (запрещен, так как аллокатор не должен копироваться)
-    template <class U> allocator_с11 (const allocator_с11<U>&) noexcept {}
+    // Конструктор копирования
+    template <class U> _allocator_с11 (const _allocator_с11<U>&) noexcept {}
 
     // Выделение памяти
     // Выделяет n элементов типа T 
@@ -47,7 +47,7 @@ struct allocator_с11 {// Тип данных, который может хра�
     // Метод rebind, который позволяет создавать аллокатор для другого типа данных
     template< class U >
     struct rebind {
-        typedef allocator_с11<U> other;
+        typedef _allocator_с11<U> other;
     };
     
     private:
@@ -58,21 +58,21 @@ struct allocator_с11 {// Тип данных, который может хра�
 
 // Оператор == для сравнения аллокаторов (всегда возвращает true)
 template <class T, class U>
-constexpr bool operator== (const allocator_с11<T>& a1, const allocator_с11<U>& a2) noexcept {
+constexpr bool operator== (const _allocator_с11<T>& a1, const _allocator_с11<U>& a2) noexcept {
     return true;
 }
 
 // Оператор != для сравнения аллокаторов (всегда возвращает false)
 template <class T, class U>
-constexpr bool operator!= (const allocator_с11<T>& a1, const allocator_с11<U>& a2) noexcept {
+constexpr bool operator!= (const _allocator_с11<T>& a1, const _allocator_с11<U>& a2) noexcept {
     return false;
 }
 
 
 // T - тип данных, которые хранит контейнер
 // MaxSize - максимальное количество элементов в контейнере
-// Allocator - тип аллокатора (по умолчанию allocator_с11<T>)
-template <typename T, size_t MaxSize, typename Allocator = allocator_с11<T>>
+// Allocator - тип аллокатора (по умолчанию _allocator_с11<T>)
+template <typename T, size_t MaxSize, typename Allocator = _allocator_с11<T>>
 class LimitedContainer {
 private:
     Allocator alloc; // Экземпляр аллокатора
@@ -130,7 +130,7 @@ public:
 
 // Класс для спискового контейнера (связь через указатели)
 // Двусвязный список, где каждый элемент хранит ссылку на предыдущий и следующий
-template <typename T, typename Allocator = allocator_с11<T>>
+template <typename T, typename Allocator = _allocator_с11<T>>
 class DoubleLinkedList {
 private:
     struct Node {
@@ -153,7 +153,7 @@ public:
     // Деструктор
     ~DoubleLinkedList() { clear(); }
     DoubleLinkedList(DoubleLinkedList&& other) noexcept
-        : head(other.head), tail(other.tail), numberOfElements(other.numberOfElements), allocator(std::move(other.allocator)) {
+        : head(other.head), tail(other.tail), size(other.size), alloc(std::move(other.alloc)) {
         other.head = nullptr; 
         other.tail = nullptr;
         other.numberOfElements = 0;
@@ -351,7 +351,7 @@ int main() {
     }
 
     // 3) Создание экземпляра std::map<int, int> с новым аллокатором
-    std::map<int, int, std::less<int>, allocator_с11<std::pair<const int, int>, 10>> map2;
+    std::map<int, int, std::less<int>, _allocator_с11<std::pair<const int, int>, 10>> map2;
 
     // 4) Заполнение 10 элементами
     for (int i = 0; i < 10; ++i) {
@@ -374,7 +374,7 @@ int main() {
 
     
     // 3) Создание экземпляра LimitedContainer с новым аллокатором, ограниченным 10 элементами
-    LimitedContainer<std::pair<const int, int>, 10, allocator_с11<std::pair<const int, int>, 10>> limited_map; 
+    LimitedContainer<std::pair<const int, int>, 10, _allocator_с11<std::pair<const int, int>, 10>> limited_map; 
 
     // 4) Заполнение 10 элементами
     for (int i = 0; i < 10; ++i) {
@@ -402,8 +402,8 @@ int main() {
     }
     std::cout << std::endl;
 
-    // Создаем список с использованием `allocator_с11`
-    DoubleLinkedList<int,allocator_с11<int>> list;
+    // Создаем список с использованием `_allocator_с11`
+    DoubleLinkedList<int,_allocator_с11<int>> list;
 
     // Добавляем элементы в список
     for(int i = 0; i < 10; ++i)
